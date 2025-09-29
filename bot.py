@@ -23,4 +23,11 @@ def ban_user(message):
     else:
         bot.reply_to(message, "Эта команда должна быть использована в ответ на сообщение пользователя, которого вы хотите забанить.")
 
+@bot.message_handler(func=lambda message: not message.text.startswith('/'))
+def moderate_message(message):
+    if "https://" in message.text.lower():
+        bot.ban_chat_member(message.chat.id, message.from_user.id) 
+        bot.reply_to(message, f"Пользователь @{message.from_user.username} был забанен.")
+    bot.reply_to(message, message.text) 
+
 bot.infinity_polling(none_stop=True)
